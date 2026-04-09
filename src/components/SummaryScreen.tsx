@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { scoreColor, scoreBg, scoreStars } from '../lib/scoring';
+import { saveSession } from '../lib/storage';
 import type { ScoreResult } from '../lib/scoring';
 import { CATEGORY_LABELS } from '../data/questions';
 import type { SessionItem } from '../data/questions';
@@ -30,6 +31,10 @@ const FG_TIPS = [
 export default function SummaryScreen({ answers, onPracticeAgain }: SummaryScreenProps) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showTips, setShowTips] = useState(false);
+
+  useEffect(() => {
+    saveSession(answers);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const totalScore = answers.reduce((sum, a) => sum + a.result.score, 0);
   const avgScore = totalScore / answers.length;
